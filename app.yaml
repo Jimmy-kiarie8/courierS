@@ -13,3 +13,13 @@ env_variables:
   APP_LOG: errorlog
   APP_KEY: base64:BKtE4BIgQCEKTIWLIaP5HOnqsONA+64hXVFvC5um2dc=
   STORAGE_DIR: /tmp
+  CACHE_DRIVER: database
+  SESSION_DRIVER: database
+  DB_HOST: 127.0.0.1
+  DB_DATABASE: courier
+  DB_USERNAME: root
+  DB_PASSWORD: password
+  DB_SOCKET: "/cloudsql/littlepesa-c0420:asia-east1:courier"
+
+beta_settings:
+  cloud_sql_instances: "littlepesa-c0420:asia-east1:courier"

@@ -20,9 +20,11 @@ use Notification;
 class ShipmentController extends Controller {
 	public function getShipments() {
 		$roles = Auth::user()->roles;
-		foreach ($roles as $role) {
-			$role_name = $role->name;
-		}
+		// var_dump($roles);die;
+		if ($roles) {
+			foreach ($roles as $role) {
+				$role_name = $role->name;
+			}
 		// return $role_name;
 		if ($role_name == 'Admin') {
 			return Shipment::all();
@@ -30,6 +32,9 @@ class ShipmentController extends Controller {
 		$results = Shipment::orderby('id', 'asc')->get();
 		// $results = Shipment::where('branch_id', Auth::user()->branch_id)->get();
 		return json_decode(json_encode($results), true);
+		}else{
+			return Shipment::all();
+		}
 	}
 
 	public function csv() {
@@ -197,8 +202,8 @@ class ShipmentController extends Controller {
 			// 'form.client_email' =>'required|email',
 			// 'form.client_address' =>'required',
 			// 'form.client_city' =>'required',
-			'form.assign_staff' =>'required',
-			'form.shipment_type' =>'required',
+			// 'form.assign_staff' =>'required',
+			// 'form.shipment_type' =>'required',
 			'form.payment' =>'required',
 			'form.insuarance_status' =>'required',
 			'form.booking_date' =>'required|date',

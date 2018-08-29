@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('companies', 'CompanyController');
 	Route::resource('email', 'EmailController');
 	Route::resource('invoice', 'InvoiceController');
-	Route::resource('tasks', 'TaskController');
+	// Route::resource('tasks', 'TaskController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::post('barcodeUpdate/{bar_code}', 'ShipmentController@barcodeUpdate')->name('barcodeUpdate');
@@ -173,7 +173,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 	// Tasks
-	Route::get('/getTasks', 'TaskController@getTasks')->name('getTasks');
+	// Route::get('/getTasks', 'TaskController@getTasks')->name('getTasks');
 
 	// Uploads
 	Route::get('/upload', 'HomeController@upload')->name('upload');

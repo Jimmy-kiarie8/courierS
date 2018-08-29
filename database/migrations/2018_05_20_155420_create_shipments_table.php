@@ -18,18 +18,18 @@ class CreateShipmentsTable extends Migration {
 			$table->string('sender_email')->nullable();
 			$table->string('sender_address')->nullable();
 			$table->string('sender_city')->nullable();
-			$table->integer('sender_phone')->nullable();
+			$table->string('sender_phone')->nullable();
 			$table->string('client_name')->nullable();
 			$table->string('client_email')->nullable();
 			$table->string('client_address')->nullable();
 			$table->string('client_postal_code')->nullable();
 			$table->string('client_region')->nullable();
 			$table->string('client_city')->nullable();
-			$table->integer('client_phone')->nullable();
+			$table->string('client_phone')->nullable();
 			$table->integer('client_id')->nullable();
 			$table->string('assign_staff')->nullable();
 			$table->string('airway_bill_no')->nullable();
-			$table->integer('bar_code')->nullable();
+			$table->string('bar_code')->nullable();
 			$table->integer('amount_ordered')->nullable();
 			$table->integer('shipment_id');
 			$table->boolean('paid')->nullable();
@@ -48,11 +48,16 @@ class CreateShipmentsTable extends Migration {
 			$table->text('remark')->nullable();
 			$table->integer('branch_id')->nullable();
 			$table->string('derivery_status')->nullable();
+			$table->string('order_id')->nullable();
+			$table->string('to_city')->nullable();
+			$table->string('from_city')->nullable();
+			$table->decimal('sub_total')->nullable();
+			$table->text('speciial_instruction')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});
 	}
-
+	
 	/**
 	 * Reverse the migrations.
 	 *
