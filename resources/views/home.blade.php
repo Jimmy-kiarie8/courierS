@@ -10,7 +10,7 @@
                   <div class="col-md-5">
                       <div class="panel">
                           <div class="panel-header text-center">
-                              File Upload page
+                              <h4>File Upload page</h5>
                               <a href="/" class="btn btn-primary pull-right">Back</a>
                           </div>
                           <div class="panel-body">
