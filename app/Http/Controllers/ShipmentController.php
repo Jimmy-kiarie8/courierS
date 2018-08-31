@@ -335,25 +335,40 @@ class ShipmentController extends Controller {
 	public function updateStatus(Request $request, Shipment $shipment, $id) {
 		// return $request->all();
 		$shipment = Shipment::find($request->id);
-		if ($request->address) {
-			$coordinates = serialize($request->address);
-			$latitude = $request->address['latitude'];
-			$longitude = $request->address['longitude'];
-			$coords = array('lat' => $latitude, 'lng' => $longitude);
-			$shipment->coordinates = $coordinates;
-			$shipment->longitude = $longitude;
-			$shipment->latitude = $latitude;
-		}
+		// if ($request->address) {
+		// 	$coordinates = serialize($request->address);
+		// 	$latitude = $request->address['latitude'];
+		// 	$longitude = $request->address['longitude'];
+		// 	$coords = array('lat' => $latitude, 'lng' => $longitude);
+		// 	$shipment->coordinates = $coordinates;
+		// 	$shipment->longitude = $longitude;
+		// 	$shipment->latitude = $latitude;
+		// }
+		// $shipment->location = $request->formobg['location'];
 		$shipment->status = $request->formobg['status'];
 		// var_dump($request->formobg['status']); die;
+		$shipment->derivery_time = $request->formobg['derivery_time'];
 		$shipment->remark = $request->formobg['remark'];
-		$shipment->save();
+		// $shipment->save();
+		if ($shipment->save()) {
+			$shipStatus = Shipment::find($id);
+			$statusUpdate = new ShipmentStatus;
+			$statusUpdate->remark = $request->formobg['remark'];
+			$statusUpdate->status = $request->formobg['status'];
+			$statusUpdate->location = $request->formobg['location'];
+			// $statusUpdate->derivery_time = $request->formobg['derivery_time'];
+			$statusUpdate->user_id = Auth::id();
+			$statusUpdate->branch_id = Auth::user()->branch_id;
+			$statusUpdate->shipment_id = $id;
+			// return $statusUpdate;
+			$statusUpdate->save();
+		}
 		return $shipment;
 	}
 
 	public function UpdateShipment(Request $request, Shipment $shipment)
 	{
-		// return form['status']
+		// return $request->all();
 		$id = [];
 		foreach ($request->selected as $selectedItems ) {
 			$id[] = $selectedItems['id'];
@@ -361,6 +376,7 @@ class ShipmentController extends Controller {
 		$status = $request->form['status'];
 		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
+		// $location = $request->form['location'];
 		$derivery_date = $request->form['scheduled_date'];
 		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();

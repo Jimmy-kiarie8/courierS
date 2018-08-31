@@ -41,7 +41,7 @@
                         <v-card>
                             <v-card-title>
                                 Invoices
-                                <download-excel :data="invoices">
+                                <download-excel :data="invoices" :fields = "json_fields">
                                     Export
                                     <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                                 </download-excel>
@@ -165,6 +165,17 @@ export default {
                     sortable: false
                 }
             ],
+            json_fields: {
+                 'Invoice Number': 'invoice_no',
+                 'Client': 'client',
+                 'Client Address': 'client_address',
+                 'Invoice Date': 'invoice_date',
+                 'Invoice Title': 'title',
+                 'Due Date': 'due_date',
+                 'Discount': 'discount',
+                 'VAT': 'vat',
+                 'Grand Total': 'grand_total',
+            },
         }
     },
     methods: {

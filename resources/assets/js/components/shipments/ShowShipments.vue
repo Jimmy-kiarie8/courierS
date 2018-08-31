@@ -56,7 +56,7 @@
                         <v-flex xs6 sm6>
                             <v-card>
                                 <v-card-title primary-title style="width: 100%">
-                                    <v-list-tile  @click="">
+                                    <v-list-tile>
                                         <v-list-tile-content>
                                             <v-list-tile-title style="height: 130px;">
                                                 <barcode v-bind:value="showItems.bar_code">

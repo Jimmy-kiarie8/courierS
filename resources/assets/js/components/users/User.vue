@@ -1,14 +1,9 @@
 <template>
 <div>
-
     <v-content>
-
         <v-container fluid fill-height v-show="!loader">
-
             <v-layout justify-center align-center>
-
                 <div class="container">
-
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm3 offset-sm4>
@@ -21,10 +16,9 @@
                         </v-layout>
                     </v-card>
                     <!-- users display -->
-
                     <v-card-title>
                         Users
-                        <download-excel :data="Allusers">
+                        <download-excel :data="Allusers" :fields = "json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -38,11 +32,8 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
                     </v-card-title>
-
                     <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search">
-
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
-
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.name }}</td>
                             <td class="text-xs-right">{{ props.item.email }}</td>
@@ -63,14 +54,11 @@
                                 </v-btn>
                             </td>
                         </template>
-
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
                             Your search for "{{ search }}" found no results.
                         </v-alert>
-
                     </v-data-table>
                     <!-- users display -->
-
                 </div>
             </v-layout>
         </v-container>
@@ -85,7 +73,7 @@
     <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches"></AddUser>
     <!-- <ShowUser @closeRequest="close" :openShowRequest="dispShow"></ShowUser> -->
     <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches"></EditUser>
-    <UserProfile @closeRequest="close" :openShowRequest="dispShow"  :user="editedItem" :AllShips="AllShips"></UserProfile>
+    <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
 </div>
 </template>
 
@@ -94,81 +82,84 @@ let AddUser = require('./AddUser.vue')
 // let ShowUser = require('./ShowUser.vue')
 let EditUser = require('./EditUser.vue')
 let UserProfile = require('./UserProfile.vue')
-
 export default {
-
     props: ['user', 'role'],
-
     components: {
         AddUser,
         // ShowUser,
         EditUser,
         UserProfile
     },
-
     data() {
-
         return {
             AllShips: [],
-                select: {
-                    state: 'All',
+            select: {
+                state: 'All',
                 abbr: 'all'
             },
             items: [{
-                        state: 'All',
+                    state: 'All',
                     abbr: 'all'
                 },
                 {
-                        state: 'Admin',
+                    state: 'Admin',
                     abbr: 'Admin'
                 },
                 {
-                        state: 'company Admin',
+                    state: 'company Admin',
                     abbr: 'companyAdmin'
                 },
                 {
-                        state: 'Customers',
+                    state: 'Customers',
                     abbr: 'Customer'
                 },
                 {
-                        state: 'Drivers',
+                    state: 'Drivers',
                     abbr: 'Driver'
                 },
             ],
             headers: [{
-                        text: "Name",
+                    text: "Name",
                     value: "name"
                 },
                 {
-                        text: "Email",
+                    text: "Email",
                     value: "email"
                 },
                 {
-                        text: "Address",
+                    text: "Address",
                     value: "address"
                 },
                 {
-                        text: "Phone Number",
+                    text: "Phone Number",
                     value: "phone"
                 },
                 {
-                        text: "City",
+                    text: "City",
                     value: "city"
                 },
                 {
-                        text: "Branch",
+                    text: "Branch",
                     value: "branch"
                 },
                 {
-                        text: "Status",
+                    text: "Status",
                     value: "status"
                 },
                 {
-                        text: 'Actions',
+                    text: 'Actions',
                     value: 'name',
                     sortable: false
                 }
             ],
+            json_fields: {
+                 'Name': 'name',
+                 'Email': 'email',
+                 'Phone': 'phone',
+                 'City': 'city',
+                 'Address': 'address',
+                 'Country': 'country',
+            },
             AllBranches: {},
             search: '',
             loader: false,
@@ -187,112 +178,78 @@ export default {
             temp: '',
             editedItem: {},
             select: {
-                    state: 'All',
+                state: 'All',
                 abbr: 'all'
             },
             items: [{
-                        state: 'All',
+                    state: 'All',
                     abbr: 'all'
                 },
                 {
-                        state: 'Admin',
+                    state: 'Admin',
                     abbr: '1'
                 },
                 {
-                        state: 'Branch Admin',
+                    state: 'Branch Admin',
                     abbr: '2'
                 },
                 {
-                        state: 'Customers',
+                    state: 'Customers',
                     abbr: '3'
                 },
                 {
-                        state: 'Drivers',
+                    state: 'Drivers',
                     abbr: '4'
                 },
             ],
         }
     },
     watch: {
-
         search() {
-
             if (this.search.length > 0) {
-
                 this.temp = this.Allusers.filter((item) => {
-
                     return item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-
                 });
-
             } else {
-
                 this.temp = this.Allusers
-
             }
-
         }
-
     },
-
     methods: {
-
         // openShow(key) {
-
         //     // this.$children[4].list = this.company[key]
-
         //     this.$children[2].list = this.Allusers[key]
-
         //     this.dispShow = true
-
         // },
-
         openAdd() {
-
             this.dispAdd = true
-
         },
-
         openEdit(item) {
             this.editedIndex = this.Allusers.indexOf(item)
-
             this.editedItem = Object.assign({}, item)
-
             // this.$children[4].list = this.company[key]
-
             // this.$children[3].form = this.Allusers[key]
-
             this.dispEdit = true
-
         },
-
         openShow(item) {
             this.editedIndex = this.Allusers.indexOf(item)
             this.editedItem = Object.assign({}, item)
             axios.post(`getUserPro/${this.editedItem.id}`)
-            .then((response) => {
-                this.loader = false
-                this.AllShips = response.data
-            })
-            .catch((error) => {
-                this.loader = false
-                this.errors = error.response.data.errors
-            })
-
+                .then((response) => {
+                    this.loader = false
+                    this.AllShips = response.data
+                })
+                .catch((error) => {
+                    this.loader = false
+                    this.errors = error.response.data.errors
+                })
             this.dispShow = true
-
         },
-
         showAlert() {
-
             this.message = 'Successifully Added';
-
             this.snackbar = true;
-
             this.color = 'black';
-
         },
-
         sort() {
             this.loading = true
             axios.post('getSorted', this.select)
@@ -305,79 +262,44 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
-
         deleteItem(item) {
-
             if (confirm('Are you sure you want to delete this item?')) {
-
                 this.loader = true
-
                 axios.delete(`/users/${id}`)
-
                     .then((response) => {
-
                         this.Allusers.splice(index, 1)
-
                         this.loader = false
-
                         this.message = 'deleted successifully'
-
                         this.color = 'red'
-
                         this.snackbar = true
-
                     })
-
                     .catch((error) => {
-
                         this.errors = error.response.data.errors
-
                         this.loader = false
-
                         this.message = 'something went wrong'
-
                         this.color = 'red'
-
                         this.snackbar = true
-
                     })
-
             }
-
         },
-
         close() {
-
             this.dispAdd = this.dispShow = this.dispEdit = this.dispShow = false
-
         },
-
         getUsers() {
             axios.get('getUsers')
-
                 .then((response) => {
                     this.Allusers = this.temp = response.data
-
                     this.loading = false
-
                 })
-
                 .catch((error) => {
                     this.loading = false
-
                     this.errors = error.response.data.errors
-
                 })
         }
-
     },
-
     mounted() {
-
         this.loader = true
-
         this.getUsers()
-
         axios.get('getBranch')
             .then((response) => {
                 this.loader = false
@@ -387,27 +309,16 @@ export default {
                 this.loader = false
                 this.errors = error.response.data.errors
             })
-
     },
-
     // beforeRouteEnter(to, from, next) {
-
     //     next(vm => {
-
     //         if (vm.role === 'Admin' || vm.role === 'companyAdmin') {
-
     //             next();
-
     //         } else {
-
     //             next('/');
-
     //         }
-
     //     })
-
     // }
-
 }
 </script>
 

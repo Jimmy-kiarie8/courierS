@@ -18,13 +18,13 @@
                         <v-flex xs7 sm7>
                             <v-card>
                                 <v-card-title primary-title>
-                                    <h3 class="headline mb-0">COURIER SCRIPTS PVT LTD.</h3>
+                                    <h3 class="headline mb-0">SpeedBall Courier Services.</h3>
                                 </v-card-title>
                                 <v-card-actions>
                                     <v-list two-line>
                                         <v-list-tile>
                                             <v-list-tile-action>
-                                                <v-icon color="indigo">account_circle</v-icon>
+                                                <v-icon color="indigo">map</v-icon>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
                                                 <v-list-tile-title>{{ showItems.sender_city }}</v-list-tile-title>

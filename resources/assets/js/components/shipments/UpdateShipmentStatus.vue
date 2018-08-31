@@ -14,7 +14,7 @@
                                 <option value="Approved">Approved</option>
                                 <option value="Arrived">Arrived</option>
                                 <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                <option value="Cancelled">Cancelled</option>
+                                <option value="Cancelled ">cancelled</option>
                                 <option value="Cleared">Cleared</option>
                                 <option value="Delivered">Delivered</option>
                                 <option value="Despatched">Despatched</option>
@@ -25,7 +25,7 @@
                                 <option value="Out For Delivery">Out For Delivery</option>
                                 <option value="Returned">Returned</option>
                                 <option value="Ready For Depart">Ready For Depart</option>
-                                <option value="scheduled">scheduled</option>
+                                <option value="Scheduled">Scheduled</option>
                                 <option value="Shipment Collected">Shipment Collected</option>
                                 <option value="Transit">Transit</option>
                                 <option value="Waiting for Scan">Waiting for scan</option>
@@ -37,10 +37,10 @@
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="form.derivery_time" color="blue darken-2" label="Schedule Time" type="time"></v-text-field>
                                 </v-flex>
+                                <v-flex xs4 sm12>
+                                    <v-text-field v-model="form.location" color="blue darken-2" label="Location" required></v-text-field>
+                                </v-flex>
                             </div>
-                            <v-flex xs4 sm12>
-                                <v-text-field v-model="form.location" color="blue darken-2" label="Location" required></v-text-field>
-                            </v-flex>
                             <v-flex xs12 sm12>
                                 <v-textarea v-model="form.remark" color="blue">
                                     <div slot="label">
@@ -75,6 +75,8 @@ export default {
             color: "",
             form: {
                 scheduled_date: '',
+                derivery_time: '',
+                location: ''
             },
         }
     },

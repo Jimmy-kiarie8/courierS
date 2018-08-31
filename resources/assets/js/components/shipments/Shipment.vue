@@ -30,7 +30,7 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments">
+                        <download-excel :data="AllShipments" :fields = "json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -193,13 +193,13 @@ export default {
                     state: 'Not Peaking',
                 },
                 {
-                    state: 'cancled',
+                    state: 'Cancelled',
                 },
                 {
                     state: 'Awaiting Confirmation',
                 },
                 {
-                    state: 'Schedueled',
+                    state: 'Scheduled',
                 },
             ],
             items: [{
@@ -223,6 +223,28 @@ export default {
                     abbr: 'Driver'
                 },
             ],
+            json_fields: {
+                 'Order Id': 'order_id',
+                 'Sender Name': 'sender_name',
+                 'Sender Email': 'sender_email',
+                 'Sender Phone': 'sender_phone',
+                 'Sender City': 'sender_city',
+                 'Sender Address': 'sender_address',
+                 'Driver': 'driver',
+                 'Client Name': 'client_name',
+                 'Client Email': 'client_email',
+                 'Client Phone': 'client_phone',
+                 'Client City': 'client_city',
+                 'Client Address': 'client_address',
+                 'Derivery Status': 'status',
+                 'From': 'from_city',
+                 'To': 'to_city',
+                 'Derivery Date': 'derivery_date',
+                 'Derivery Time': 'derivery_time',
+                 'Quantity': 'amount_ordered',
+                 'Booking Date': 'booking_date',
+                 'Special Instructions': 'speciial_instruction' 
+            },
             snackbar: false,
             timeout: 5000,
             message: "Success",
