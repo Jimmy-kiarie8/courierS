@@ -1,20 +1,12 @@
 <template>
 <div>
-
     <v-content>
-
         <v-container fluid fill-height>
-
             <!-- Data table -->
-
             <div style="width: 100%;">
-
                 <div v-show="loader" style="text-align: center">
-
                     <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
-
                 </div>
-
                 <div v-show="!loader">
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
@@ -37,7 +29,6 @@
                             </v-flex>
                         </v-layout>
                     </v-card>
-
                     <v-card-title>
                         <download-excel :data="AllShipments">
                             Export
@@ -45,107 +36,75 @@
                         </download-excel>
                         <v-btn color="primary" flat @click="openShipment">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv">Upload Excel</v-btn>
-
                         <v-tooltip right>
                             <v-btn icon slot="activator" class="mx-0" @click="getShipments">
                                 <v-icon color="blue darken-2" small>refresh</v-icon>
                             </v-btn>
                             <span>Refresh</span>
                         </v-tooltip>
-
                         <v-spacer></v-spacer>
-
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-
                     </v-card-title>
-
                     <v-data-table :headers="headers" :items="AllShipments" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
-
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
-
                         <template slot="items" slot-scope="props">
                             <td>
                                 <v-checkbox v-model="props.selected" primary></v-checkbox>
                             </td>
-
                             <td>
-
                                 {{ props.item.bar_code }}
-
                             </td>
-
                             <td class="text-xs-right">
-
                                 <barcode v-bind:value="props.item.bar_code" style="height: 10px;">
-
                                     No barcode
-
                                 </barcode>
-
                             </td>
-
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
                             <td class="text-xs-right">{{ props.item.sender_name }}</td>
-
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
                             <td class="text-xs-right">{{ props.item.client_email }}</td>
                             <td class="text-xs-right">{{ props.item.client_address }}</td>
-
                             <td class="text-xs-right">{{ props.item.sender_city }}</td>
-
                             <td class="text-xs-right">{{ props.item.client_city }}</td>
-
                             <td class="text-xs-right">{{ props.item.booking_date }}</td>
-
                             <td class="text-xs-right">{{ props.item.status }}</td>
-
                             <td class="justify-center layout px-0">
-
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="editItem(props.item)" slot="activator">
-
                                         <v-icon color="blue darken-2" small>edit</v-icon>
-
                                     </v-btn>
                                     <span>Edit</span>
                                 </v-tooltip>
-
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="UpdateItems(props.item)" slot="activator">
-
                                         <v-icon color="blue darken-2" dark small>save</v-icon>
-
                                     </v-btn>
                                     <span>Update Status</span>
                                 </v-tooltip>
-
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
-
                                         <v-icon color="pink darken-2" small>delete</v-icon>
-
                                     </v-btn>
                                     <span>Delete</span>
                                 </v-tooltip>
-
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="showDetails(props.item)" slot="activator">
-
-                                        <v-icon color="teal darken-2" small>visibility</v-icon>
-
+                                        <v-icon color="info darken-2" small>visibility</v-icon>
                                     </v-btn>
                                     <span>View</span>
                                 </v-tooltip>
-
                                 <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="ShipmentTrack(props.item)" slot="activator">
-
                                         <v-icon color="teal darken-2" small>call_split</v-icon>
-
                                     </v-btn>
                                     <span>View Status</span>
                                 </v-tooltip>
-
+                                <v-tooltip bottom>
+                                    <v-btn icon class="mx-0" @click="Shipcharges(props.item)" slot="activator">
+                                        <v-icon color="indigo darken-2" small>attach_money</v-icon>
+                                    </v-btn>
+                                    <span>Charges</span>
+                                </v-tooltip>
                             </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -155,7 +114,6 @@
                             From {{ pageStart }} to {{ pageStop }}
                         </template>
                     </v-data-table>
-
                     <v-btn color="primary" raised style="float: right;" @click="UpdateShipmentStatus">Update Status</v-btn>
                     <v-btn color="info" raised style="float: right;" @click="assignDriver">Assign Driver</v-btn>
                     <v-btn color="success" raised style="float: right;" @click="assignBranch">Assign Branch</v-btn>
@@ -173,6 +131,7 @@
     <AssignBranch :AllBranches="AllBranches" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
     <TrackShipment @refreshRequest="getShipments" :shipments="shipment" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></TrackShipment>
     <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
+    <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment"></mySCharges>
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
@@ -191,10 +150,9 @@ let AssignDriver = require('./AssignDriver')
 let AssignBranch = require('./AssignBranch')
 let TrackShipment = require('./TrackShipment')
 let myCsvFile = require('../csv/CsvFile')
-
+let mySCharges = require('./Charge')
 export default {
     props: ["user", "role"],
-
     components: {
         AddShipment,
         ShowShipment,
@@ -205,13 +163,14 @@ export default {
         AssignDriver,
         AssignBranch,
         TrackShipment,
-        myCsvFile
+        myCsvFile,
+        mySCharges
     },
-
     data() {
         return {
             csvModel: false,
             trackModel: false,
+            chargeModal: false,
             AllBranches: [],
             AllDrivers: {},
             markers: {
@@ -348,162 +307,110 @@ export default {
             shipment: {}
         };
     },
-
     methods: {
         UpdateStatus() {
             // alert(this.updateitedItem.id);
-
             axios
                 .post(`/updateStatus/${this.updateitedItem.id}`, {
                     formobg: this.$data.updateitedItem,
-
                     address: this.$data.address
                 })
-
                 .then(response => {
                     this.resetForm();
-
                     // console.log(response);
-
                     this.message = "Updated";
-
                     this.color = "black";
-
                     this.snackbar = true;
-
                     this.markers.push(response.data);
                 });
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm);
-
             this.$refs.form.reset();
         },
-
         openShipment() {
             this.dialog = true;
         },
-
         addProduct() {
             // alert(this.updateitedItem.id);
-
             axios
                 .post(`/productAdd/${this.updateitedItem.id}`, this.$data.form)
-
                 .then(response => {
                     // console.log(response.data);
-
                     this.message = "Product Added";
-
                     this.color = "black";
-
                     this.snackbar = true;
-
                     this.resetForm();
-
                     this.AllProducts.push(response.data);
-
                     this.pdialog2 = false;
                 });
         },
-
         editShipment(key) {
             // alert(key);
-
             this.$children[2].list = this.AllShipments[key];
-
             this.dialog1 = true;
         },
-
         openProduct(updateitedItem) {
             this.pdialog2 = true;
         },
-
         initialize() {
             this.AllShipments;
         },
-
         UpdateItems(item) {
             // axios
             //   .post(`/getcoordinatesArray/${item.id}`)
-
             //   .then(response => (this.markers.position = response.data))
-
             //   .catch(error => (this.errors = error.response.data.errors));
-
             // console.log(this.coordinatesArr);
-
             this.updateitedItem = Object.assign({}, item);
-
             this.updatedIndex = this.AllShipments.indexOf(item);
-
             // console.log(this.updateitedItem);
-
             this.updateModal = true;
         },
-
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-
             this.editedIndex = this.AllShipments.indexOf(item);
-
             // console.log(this.editedItem);
-
             this.dialog1 = true;
         },
-
         showDetails(item) {
             this.showItem = Object.assign({}, item);
-
             this.editedIndex = this.AllShipments.indexOf(item);
-
             this.showdialog1 = true;
-
             //     axios
             //         .post("/getProducts")
-
             //         .then(response => (this.newProducts = response.data))
-
             //         .catch(error => (this.errors = error.response.data.errors));
-
             //     // console.log(this.newProducts);
         },
-
         ShipmentTrack(item) {
             this.shipment = Object.assign({}, item);
-
             this.editedIndex = this.AllShipments.indexOf(item);
-
             this.trackModel = true
         },
-
+        Shipcharges(item) {
+            this.shipment = Object.assign({}, item);
+            this.editedIndex = this.AllShipments.indexOf(item);
+            this.chargeModal = true
+        },
         ShipmentCsv() {
             this.csvModel = true
         },
-
         deleteItem(item) {
             const index = this.AllShipments.indexOf(item);
-
             if (confirm("Are you sure you want to delete this item?")) {
                 axios
                     .delete(`/shipment/${item.id}`)
-
                     .then(response => {
                         this.message = "Deleted";
-
                         this.color = "black";
-
                         this.snackbar = true;
-
                         this.AllShipments.splice(index, 1);
-
                         // console.log(response);
                     })
-
                     .catch(error => (this.errors = error.response.data.errors));
             }
         },
-
         UpdateShipmentStatus(item) {
             if (this.selected.length < 1) {
                 this.message = 'please select a shipment'
@@ -513,7 +420,6 @@ export default {
                 this.UpdateShipmentModel = true
             }
         },
-
         assignDriver() {
             if (this.selected.length < 1) {
                 this.message = 'please select a shipment'
@@ -523,7 +429,6 @@ export default {
                 this.AssignDriverModel = true
             }
         },
-
         assignBranch() {
             if (this.selected.length < 1) {
                 this.message = 'please select a shipment'
@@ -533,30 +438,23 @@ export default {
                 this.AssignBranchModel = true
             }
         },
-
         close() {
             this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 =
-                this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = false;
+                this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = false;
         },
-
         getTotal() {
             this.gettotlaAmount = true;
-
             if (this.form.quantity && this.form.price) {
                 this.form.total = this.form.quantity * this.form.price;
             } else {
                 this.form.total = 0;
             }
         },
-
         showalert() {
             this.message = "success";
-
             this.color = "indigo";
-
             this.snackbar = true;
         },
-
         sort() {
             this.loading = true
             axios.post('filterShipment', {
@@ -577,151 +475,107 @@ export default {
             this.loading = true
             axios
                 .get("/getShipments")
-
                 .then(response => {
                     this.loading = false
                     this.AllShipments = response.data;
-
                     this.loader = false;
                 })
-
                 .catch(error => {
                     this.loading = false
                     this.errors = error.response.data.errors;
-
                     this.loader = false;
                 });
         }
     },
-
     mounted() {
-
         this.loader = true;
-
         // axios
         //     .get("/getShipments")
-
         //     .then(response => {
         //         this.AllShipments = response.data;
-
         //         this.loader = false;
         //     })
-
         //     .catch(error => {
         //         this.errors = error.response.data.errors;
-
         //         this.loader = false;
         //     });
         this.getShipments()
-
         axios
             .get("getCustomer")
-
             .then(response => {
                 this.Allcustomers = response.data;
-
                 this.loader = false;
             })
-
             .catch(error => {
                 this.errors = error.response.data.errors;
-
                 this.loader = false;
             });
-
         this.loader = true;
-
         axios
             .get("/getBranch")
-
             .then(response => {
                 this.AllBranches = response.data;
-
                 this.loader = false;
             })
-
             .catch(error => {
                 console.log(error);
-
                 this.errors = error.response.data.errors;
-
                 this.loader = false;
             });
-
         axios
             .get("/getDrivers")
-
             .then(response => {
                 this.AllDrivers = response.data;
-
                 this.loader = false;
             })
-
             .catch(error => {
                 console.log(error);
-
                 this.errors = error.response.data.errors;
-
                 this.loader = false;
             });
     },
-
     computed: {
         activeFab() {
             switch (this.tabs) {
                 case "one":
                     return {
                         class: "purple",
-
                         icon: "account_circle"
                     };
-
                 case "two":
                     return {
                         class: "red",
-
                         icon: "edit"
                     };
-
                 case "three":
                     return {
                         class: "green",
-
                         icon: "keyboard_arrow_up"
                     };
-
                 default:
                     return {};
             }
         },
-
         formTitle() {
             return this.editedIndex === -1 ? "New Item" : "Edit Item";
         }
-
     },
-
     created() {
         this.initialize();
     },
-
     watch: {
         dialog(val) {
             val || this.close();
         },
-
         top(val) {
             this.bottom = !val;
         },
-
         right(val) {
             this.left = !val;
         },
-
         bottom(val) {
             this.top = !val;
         },
-
         left(val) {
             this.right = !val;
         }

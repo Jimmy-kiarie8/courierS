@@ -71,6 +71,7 @@ let myRoles = require('./components/users/roles/Roles.vue');
 let myscheduled = require('./components/shipments/Scheduled.vue');
 let myTasks = require('./components/tasks/Task.vue');
 let myUploadFile = require('./components/upload/UploadFile.vue');
+let myCharges = require('./components/charge/Charge.vue');
 
 const routes = [
 {path: '/', component: dashboard },
@@ -93,6 +94,7 @@ const routes = [
 {path: '/scheduled', component: myscheduled },
 {path: '/tasks', component: myTasks },
 {path: '/uploads', component: myUploadFile },
+{path: '/charges', component: myCharges },
 
 
 ]
@@ -107,7 +109,7 @@ const app = new Vue({
     components: {
     	myHeader, myUser, myDrivers, myShipment, myScanner, myContainer, myMap,
         myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
-        myReports, myPdf, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile
+        myReports, myPdf, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges
     },
     data: {
     shipments: [],

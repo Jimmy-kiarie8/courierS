@@ -21,4 +21,7 @@ class Branch extends Model
 	public function shipments() {
 		return $this->hasMany('App\Shipment','branch_id');
 	}
+	public function charges() {
+		return $this->hasMany('App\Charge','branch_id');
+	}
 }

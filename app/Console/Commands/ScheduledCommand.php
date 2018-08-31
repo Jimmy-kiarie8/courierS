@@ -54,8 +54,8 @@ class ScheduledCommand extends Command
 			$date1 = Carbon::today();
 			$date2 = new Carbon('tomorrow');
         	$date2->diffInDays($date1);
-        	$shipment = Shipment::whereBetween('created_at', [$date1, $date2])->setEagerLoads([])->get();
+        	$shipment = Shipment::whereBetween('derivery_date', [$date1, $date2])->setEagerLoads([])->get();
 		}
-		Mail::queue(new scheduleMail($user, $shipment, $email));
+		Mail::send(new scheduleMail($user, $shipment, $email));
     }
 }

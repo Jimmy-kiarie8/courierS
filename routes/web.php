@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('email', 'EmailController');
 	Route::resource('invoice', 'InvoiceController');
 	// Route::resource('tasks', 'TaskController');
+	Route::resource('charges', 'ChargeController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::post('barcodeUpdate/{bar_code}', 'ShipmentController@barcodeUpdate')->name('barcodeUpdate');
@@ -96,6 +97,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
+	Route::get('getBranchCharge', 'BranchController@getBranchCharge')->name('getBranchCharge');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
 
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
@@ -187,8 +189,14 @@ Route::group(['middleware' => ['auth']], function () {
 	// Route::get('scheduler', function (){
 	// 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
 	//  });
+
+	// Charges
+	Route::get('/getCharges', 'ChargeController@getCharges')->name('getCharges');
+	Route::post('/shipCharge/{id}', 'ChargeController@shipCharge')->name('shipCharge');
+	
 	 
 });
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+	// Route::get('scheduler', function (){
+	// 	\Illuminate\Support\Facades\Artisan::call('schedule:run');
+	//  });

@@ -65,4 +65,8 @@ class BranchController extends Controller {
 	public function getBranchShip(Request $request, $id) {
 		return Branch::where('id', $id)->get();
 	}
+
+	public function getBranchCharge() {
+		return Branch::with('charges')->get();
+	}
 }

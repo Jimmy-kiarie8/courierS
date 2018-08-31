@@ -199,3 +199,7 @@ div.dataTables_wrapper div.dataTables_filter input {
     height: 65px !important;
     margin-top: -25px !important;
 }
+
+.v-list__tile:hover{
+    background-color: #9e9e9e !important;
+}

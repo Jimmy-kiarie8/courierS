@@ -90,7 +90,7 @@ class ShipmentController extends Controller {
 		// $barcode = Shipment::find(1);
 		// return count(Shipment::all());
 		if (count($results) > 0) {
-			$barcode->derivery_status = 'Stored';
+			$barcode->derivery_status = 'Warehouse';
 		} elseif (count($results2) > 0) {
 			$barcode->derivery_status = 'Return 1';
 		} elseif (count($derivery_status) > 0) {
@@ -148,7 +148,7 @@ class ShipmentController extends Controller {
 							// 'derivery_date' => $row['derivery_date'],
 							// 'order_date' => $row['order_date'],
 							'user_id' => Auth::id(),
-							'status' => 'Stored',
+							'status' => 'Warehouse',
 							'created_at' => new DateTime(),
 							'booking_date' => new DateTime(),
 							'updated_at' => new DateTime(),
@@ -359,15 +359,17 @@ class ShipmentController extends Controller {
 			$id[] = $selectedItems['id'];
 		}
 		$status = $request->form['status'];
+		$derivery_time = $request->form['derivery_time'];
 		$remark = $request->form['remark'];
 		$derivery_date = $request->form['scheduled_date'];
-		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark]);
+		$shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time]);
 		$shipStatus = Shipment::whereIn('id', $id)->get();
 		foreach ($shipStatus as $statuses) {
 			$statusUpdate = new ShipmentStatus;
 			$statusUpdate->remark = $request->form['remark'];
 			$statusUpdate->status = $request->form['status'];
 			$statusUpdate->location = $request->form['location'];
+			// $statusUpdate->derivery_time = $request->form['derivery_time'];
 			$statusUpdate->user_id = Auth::id();
 			$statusUpdate->branch_id = Auth::user()->branch_id;
 			$statusUpdate->shipment_id = $statuses->id;

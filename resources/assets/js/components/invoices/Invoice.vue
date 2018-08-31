@@ -1,22 +1,20 @@
 <template>
 <div>
-
     <v-content>
-
         <v-container fluid fill-height>
-
             <div v-show="loader" style="text-align: center; width: 100%; margin-top: 200px;">
-
                 <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
-
             </div>
-
             <v-layout justify-center align-center v-show="!loader">
-
                 <v-layout row wrap>
                     <v-flex sm12>
                         <v-btn @click="invoiceAdd" flat color="primary">Add Invoice</v-btn>
-
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" icon class="mx-0" @click="getInvoices">
+                                <v-icon small color="blue darken-2">refresh</v-icon>
+                            </v-btn>
+                            <span>Refresh</span>
+                        </v-tooltip>
                         <v-layout wrap>
                             <v-flex sm12>
                                 <v-card style="background: rgba(5, 117, 230, 0.16);">
@@ -24,11 +22,9 @@
                                         <v-flex xs4 sm2 offset-sm1>
                                             <v-text-field v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
                                         </v-flex>
-
                                         <v-flex xs4 sm2 offset-sm1>
                                             <v-text-field v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                                         </v-flex>
-
                                         <v-flex xs4 sm3 offset-sm1>
                                             <v-select :items="AllClients" v-model="select" :hint="`${select.name}`" label="Select" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                         </v-flex>
@@ -42,7 +38,6 @@
                         </v-layout>
                     </v-flex>
                     <v-flex sm12>
-
                         <v-card>
                             <v-card-title>
                                 Invoices
@@ -90,59 +85,34 @@
                     </v-flex>
                     <!-- <v-flex sm12> -->
                 </v-layout>
-
             </v-layout>
-
         </v-container>
-
         <v-snackbar :timeout="timeout" bottom :color="color" left v-model="snackbar">
-
             {{ message }}
-
             <!-- <v-icon dark right>check_circle</v-icon> -->
-
             <v-btn>close</v-btn>
-
         </v-snackbar>
-
     </v-content>
-
     <AddInvoice @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :buyers="AllClients"></AddInvoice>
-
     <EditInvoice @closeRequest="close" :openAddRequest="dispEdit" @alertRequest="showAlert" :buyers="AllClients" :invoiceData="editinvoice"></EditInvoice>
-
     <ShowInvoice @closeRequest="close" :openAddRequest="dispShow" @alertRequest="showAlert" :invoice="editinvoice"></ShowInvoice>
-
     <MailInvoice @closeRequest="close" :openMailRequest="dispMail" @alertRequest="showAlert" :invoice="editinvoice"></MailInvoice>
-
 </div>
 </template>
 
 <script>
 let AddInvoice = require('./AddInvoice');
-
 let EditInvoice = require('./EditInvoice');
-
 let ShowInvoice = require('./ShowInvoice');
-
 let MailInvoice = require('./EMail');
-
 export default {
-
     components: {
-
         AddInvoice,
-
         EditInvoice,
-
         ShowInvoice,
-
         MailInvoice
-
     },
-
     data() {
-
         return {
             select: {
                 name: 'All',
@@ -162,11 +132,8 @@ export default {
             AllClients: [],
             editinvoice: {},
             form: {
-
                 start_date: '',
-
                 end_date: ''
-
             },
             loading: false,
             search: '',
@@ -198,227 +165,122 @@ export default {
                     sortable: false
                 }
             ],
-
         }
-
     },
-
     methods: {
-
         sort() {
-
             this.loading = true
-
             axios.post('getInvoiceSort', {
                     form: this.form,
                     select: this.select
                 })
-
                 .then((response) => {
-
                     this.loading = false
-
                     this.invoices = response.data
-
                 })
-
                 .catch((error) => {
-
                     this.loading = false
-
                     this.errors = error.response.data.errors
-
                 })
-
         },
-
         invoiceEdit(invoice) {
-
             // console.log(invoice);
-
             this.editinvoice = Object.assign({}, invoice)
-
             this.editedIndex = this.invoices.indexOf(invoice)
-
             // console.log(this.editedItem);
-
             this.dispEdit = true
-
         },
-
         invoiceAdd() {
-
             this.dispAdd = true
-
         },
-
         /*invoiceEdit(key){		      	this.$children[2].list = this.invoices[key]		this.dispEdit  = true		},*/
-
         invoiceShow(invoice) {
-
             this.editinvoice = Object.assign({}, invoice)
-
             this.editedIndex = this.invoices.indexOf(invoice)
-
             // console.log(this.editedItem);
-
             this.dispShow = true
-
             // this.$children[3].list = this.invoices[key]
-
         },
-
         invoiceMail(invoice) {
-
             this.editinvoice = Object.assign({}, invoice)
-
             this.editedIndex = this.invoices.indexOf(invoice)
-
             // console.log(this.editedItem);
-
             this.dispMail = true
-
             // this.$children[3].list = this.invoices[key]
-
         },
-
         editItem(item) {
-
             this.editedItem = Object.assign({}, item)
-
             this.editedIndex = this.Allusers.indexOf(item)
-
             // console.log(this.editedItem);
-
             this.pdialog2 = true
-
         },
-
         showAlert() {
-
             this.message = 'Successifully Added';
-
             this.snackbar = true;
-
             this.color = 'indigo';
-
         },
-
         invoicedel(key, id) {
-
             if (confirm('Are you sure you want to delete this item?')) {
-
                 this.loader = true
-
                 axios.delete(`/users/${id}`)
-
                     .then((response) => {
-
                         this.Allusers.splice(index, 1)
-
                         this.loader = false
-
                         this.message = 'deleted successifully'
-
                         this.color = 'red'
-
                         this.snackbar = true
-
                     })
-
                     .catch((error) => {
-
                         this.errors = error.response.data.errors
-
                         this.loader = false
-
                         this.message = 'something went wrong'
-
                         this.color = 'red'
-
                         this.snackbar = true
-
                     })
-
             }
-
         },
-
         close() {
-
             this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false
-
         },
-
-    },
-
-    computed: {
-
-        Start_dates() {
-
-            return this.form.start_date;
-
-        },
-
-        end_dates() {
-
-            return this.form.end_date;
-
+        getInvoices() {
+            axios.get('getInvoice')
+                .then((response) => {
+                    this.invoices = response.data
+                })
+                .catch((error) => {
+                    this.loader = false
+                    this.errors = error.response.data.errors
+                })
         }
-
     },
-
+    computed: {
+        Start_dates() {
+            return this.form.start_date;
+        },
+        end_dates() {
+            return this.form.end_date;
+        }
+    },
     mounted() {
-
         this.loader = true
-
+        this.getInvoices()
         axios.get('getUsers')
-
             .then((response) => {
-
                 this.Allusers = response.data
-
             })
-
             .catch((error) => {
-
                 this.errors = error.response.data.errors
-
             })
-
         axios.get('getCustomer')
-
             .then((response) => {
-
+                this.loader = false
                 this.AllClients = response.data
-
             })
-
             .catch((error) => {
-
-                this.errors = error.response.data.errors
-
-            })
-
-        axios.get('getInvoice')
-
-            .then((response) => {
-
                 this.loader = false
-
-                this.invoices = response.data
-
-            })
-
-            .catch((error) => {
-
-                this.loader = false
-
                 this.errors = error.response.data.errors
-
             })
 
     },
-
 }
 </script>

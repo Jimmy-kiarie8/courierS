@@ -41,14 +41,6 @@
   
                     <v-flex xs12 sm4>
   
-                      <v-text-field v-model="form.due_date" color="blue darken-2" label="Due Date" type='date' required></v-text-field>
-  
-                      <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
-  
-                    </v-flex>
-  
-                    <v-flex xs12 sm4>
-  
                       <v-text-field v-model="form.invoice_date" color="blue darken-2" label="Invoice Date" type='date' required></v-text-field>
   
                       <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
@@ -65,7 +57,7 @@
                     
                     <div class="form-group col-md-4">
   
-                      <label for="buyers" class="col-md-4 col-form-label text-md-right">Select buyers</label>
+                      <label for="buyers" class="col-md-4 col-form-label text-md-right">Select Client</label>
   
                       <div class="col-md-6">
   

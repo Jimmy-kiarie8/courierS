@@ -196,7 +196,8 @@ class InvoiceController extends Controller {
 			$email_to = $email_tothis->email;
 		}
 		// return $email_to;
+		$mail = 'jimlaravel@gmail.com';
 		$invoice = Invoice::where('invoice_no', $request->invoice_no)->with('products')->first();
-		Mail::queue(new InvoiceMail($invoice, $email_to, $request->subject));
+		Mail::queue(new InvoiceMail($invoice, $mail, $request->subject));
 	}
 }

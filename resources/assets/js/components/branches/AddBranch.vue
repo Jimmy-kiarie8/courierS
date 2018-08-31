@@ -37,7 +37,7 @@
                                 <v-btn flat @click="resetForm">reset</v-btn>
                                 <v-btn flat @click="close">Close</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn :disabled="!formIsValid" flat color="primary" @click="save">Submit</v-btn>
+                                <v-btn :disabled="loading" :loading="loading" flat color="primary" @click="save">Submit</v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-layout>
@@ -61,7 +61,7 @@ export default {
         return {
             errors: {},
             defaultForm,
-            e1: false,
+            loading: false,
             form: Object.assign({}, defaultForm),
             rules: {
                 name: [val => (val || '').length > 0 || 'This field is required']
@@ -70,8 +70,10 @@ export default {
     },
     methods: {
         save() {
+            this.loading = true
             axios.post('/branches', this.$data.form).
             then((response) => {
+                    this.loading = false
                     console.log(response);
                     this.$parent.AllBranches.push(response.data)
                     this.close;
@@ -80,7 +82,10 @@ export default {
                     this.$emit('alertRequest');
 
                 })
-                .catch((error) => this.errors = error.response.data.errors)
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                    })
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm)

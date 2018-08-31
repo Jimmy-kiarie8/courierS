@@ -41,7 +41,7 @@ class CreateShipmentsTable extends Migration {
 			$table->string('insuarance_status')->nullable();
 			$table->string('from')->nullable();
 			$table->string('to')->nullable();
-			$table->integer('total_freight')->nullable();
+			$table->string('charges')->nullable();
 			$table->date('booking_date')->nullable();
 			$table->date('derivery_date')->nullable();
 			$table->time('derivery_time')->nullable();
